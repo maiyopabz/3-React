@@ -2,12 +2,15 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-h1, h2, h3, .card-body>h5 {
+h1,
+h2,
+h3,
+.card-body>h5 {
   font-family: "Lobster", cursive;
 }
 
 h2 {
-  color: #3046c5;
+  color: #3046C5;
 }
 
 .card-img-overlay h5 {
