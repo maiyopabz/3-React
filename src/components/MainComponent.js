@@ -8,7 +8,7 @@ import Contact from "./ContactComponent";
 import About from "./AboutComponent";
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { addComment } from '../redux/ActionCreators';
+import { addComment, fetchCampsites } from '../redux/ActionCreators';
 
 
 const mapStateToProps = state => {
@@ -21,38 +21,42 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-  addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text))
+  addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
+    fetchCampsites: () => (fetchCampsites())
 };
 
 class Main extends Component {
 
- 
-  render() {
-    const HomePage = () => {
-      return (
-        <Home
-          campsite={
-            this.props.campsites.filter((campsite) => campsite.featured)[0]
-          }
-          promotion={
-            this.props.promotions.filter((promotion) => promotion.featured)[0]
-          }
-          partner={this.props.partners.filter((partner) => partner.featured)[0]}
-        />
-      );
-    };
+  componentDidMount() {
+    this.props.fetchCampsites();
+}
 
-    const CampsiteWithId = ({ match }) => {
+
+render() {
+
+  const HomePage = () => {
       return (
-        <CampsiteInfo
-          campsite={this.props.campsites.filter((campsite) => campsite.id === 
-          +match.params.campsiteId)[0]}
-          comments={this.props.comments.filter((comment) => comment.campsiteId === 
-          +match.params.campsiteId)}
-          addComment={this.props.addComment}
-        />
+          <Home
+              campsite={this.props.campsites.campsites.filter(campsite => campsite.featured)[0]}
+              campsitesLoading={this.props.campsites.isLoading}
+              campsitesErrMess={this.props.campsites.errMess}
+              promotion={this.props.promotions.filter(promotion => promotion.featured)[0]}
+              partner={this.props.partners.filter(partner => partner.featured)[0]}
+          />
       );
-    };
+  }
+
+  const CampsiteWithId = ({match}) => {
+      return (
+          <CampsiteInfo 
+              campsite={this.props.campsites.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
+              isLoading={this.props.campsites.isLoading}
+              errMess={this.props.campsites.errMess}
+              comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
+              addComment={this.props.addComment}
+          />
+      );
+  };
 
     return (
       <div>
